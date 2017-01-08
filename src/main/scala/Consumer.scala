@@ -45,6 +45,6 @@ class Consumer(val brokers: String,
 }
 
 object ConsumerRun extends App {
-  val example = new Consumer("localhost:9092", "group1", "test_topic")
+  val example = new Consumer("localhost:9092", "group1", "politrons_topic")
   example.run()
 }

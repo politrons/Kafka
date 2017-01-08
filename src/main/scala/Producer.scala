@@ -11,11 +11,11 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.util.Random
 
 object Producer extends App {
-  val events = 10000
   val topic = "test_topic"
   val brokers = "localhost:9092"
   val rnd = new Random()
   val props = new Properties()
+  props.put("auto.create.topics.enable", "true")
   props.put("bootstrap.servers", brokers)
   props.put("client.id", "Producer")
   props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
@@ -26,12 +26,13 @@ object Producer extends App {
   val t = System.currentTimeMillis()
   val runtime = new Date().getTime()
   val idKey = "192.168.2." + rnd.nextInt(255)
-  val msg = s"$runtime www.example.com $idKey"
-  val data = new ProducerRecord[String, String]("test_topic", idKey, msg)
+  val msg = s"$runtime message example $idKey"
+  val data = new ProducerRecord[String, String]("politrons_topic", idKey, msg)
 
   //async
   //producer.send(data, (m,e) => {})
   //sync
   producer.send(data)
-//  producer.close()
+  producer.close()
+
 }
