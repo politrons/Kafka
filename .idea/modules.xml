@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Kafka.iml" filepath="$PROJECT_DIR$/.idea/modules/Kafka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Kafka_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Kafka_main.iml" group="Kafka" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Kafka_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Kafka_test.iml" group="Kafka" />
+    </modules>
+  </component>
+</project>
