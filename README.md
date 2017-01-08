@@ -1,15 +1,16 @@
 Author  Pablo Perez Garcia
 
-![My image](src/main/resources/img/kafka.jpg)`
+![My image](src/main/resources/img/kafka.png)
 
 Example of Producer/Consumer with Kafka
 
 This example will require you install Kafka, follow the next steps to install/run
 
-``
+```
 $ brew search kafka
 $ brew install kafka
 ```
+
 Run Zookeeper:
 
 ```
