@@ -4,7 +4,7 @@ package main.scala
   * Created by pabloperezgarcia on 08/01/2017.
   */
 
-import java.util.{Date, Properties}
+import java.util.{Date, Properties, UUID}
 
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
@@ -15,24 +15,36 @@ object Producer extends App {
   val brokers = "localhost:9092"
   val rnd = new Random()
   val props = new Properties()
-  props.put("auto.create.topics.enable", "true")
-  props.put("bootstrap.servers", brokers)
-  props.put("client.id", "Producer")
-  props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-  props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  createProperty()
+  sendData()
 
+  private def createProperty() = {
+    props.put("auto.create.topics.enable", "true") //Create the topic when it´s publish if does not exist
+    props.put("bootstrap.servers", brokers)
+    props.put("client.id", "Producer")
+    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  }
 
-  val producer = new KafkaProducer[String, String](props)
-  val t = System.currentTimeMillis()
-  val runtime = new Date().getTime()
-  val idKey = "192.168.2." + rnd.nextInt(255)
-  val msg = s"$runtime message example $idKey"
-  val data = new ProducerRecord[String, String]("politrons_topic", idKey, msg)
+  private def sendData() = {
+    while (true) {
+      val producer = new KafkaProducer[String, String](props)
+      val data: ProducerRecord[String, String] = createMessage
+      //async
+      //  producer.send(data, (m,e) => {
+      //
+      //  })
+      //sync
+      producer.send(data)
+      producer.close()
+    }
+  }
 
-  //async
-  //producer.send(data, (m,e) => {})
-  //sync
-  producer.send(data)
-  producer.close()
-
+  private def createMessage = {
+    val runtime = new Date().getTime()
+    val idKey = UUID.randomUUID().toString
+    val msg = s"$runtime message example $idKey"
+    val data = new ProducerRecord[String, String]("politrons_topic", idKey, msg)
+    data
+  }
 }
