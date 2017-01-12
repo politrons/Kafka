@@ -1,34 +1,17 @@
-ext {
-    resolveSystemOrEnvProperty = { String name, defaultValue = null ->
-        if (System.properties.containsKey(name)) return System.properties[name]
-        if (System.env.containsKey(name)) return System.env[name]
-        return defaultValue
-    }
-    majorMinorVersion = "4.0"
-    host = resolveSystemOrEnvProperty("HOST", "http://localhost:8080")
-}
-
-version = '1.0'
-
-
-apply plugin: 'jvm-component'
-apply plugin: 'java-lang'
-
-// Groovy must be first and the scala plugin does java/scala at the same time.
 apply plugin: 'scala'
-
-// Group and version artifact information
-// Placed here to avoid issues with the ordering of the included scripts.
 
 repositories {
     mavenCentral()
+    maven {
+        url "http://repo.akka.io/snapshots/"
+    }
 }
-
 
 dependencies {
     compile 'com.fasterxml.jackson.module:jackson-module-scala_2.10:2.8.3'
     compile group: 'org.apache.kafka', name: 'kafka-clients', version: '0.10.1.0'
-    compile 'junit:junit:4.11'
+    compile group: 'com.typesafe.akka', name: 'akka-stream-kafka_2.12', version: '0.13'
+    compile group: 'org.scala-lang', name: 'scala-library', version: '2.11.8'
     compile 'org.clapper:classutil_2.11:1.0.13'
 }
 
@@ -37,13 +20,5 @@ task wrapper(type: Wrapper) {
 }
 
 
-model {
-    components {
-        main(JvmLibrarySpec) {
-            api {
-                exports 'src.main.scala'
-            }
-        }
-    }
-}
+
 

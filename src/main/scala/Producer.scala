@@ -6,12 +6,12 @@ package main.scala
 
 import java.util.{Date, Properties, UUID}
 
-import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord, RecordMetadata}
 
 import scala.util.Random
 
 object Producer extends App {
-  val topic = "test_topic"
+  val topic = "politrons_topic"
   val brokers = "localhost:9092"
   val rnd = new Random()
   val props = new Properties()
@@ -29,22 +29,17 @@ object Producer extends App {
   private def sendData() = {
     while (true) {
       val producer = new KafkaProducer[String, String](props)
-      val data: ProducerRecord[String, String] = createMessage
-      //async
-      //  producer.send(data, (m,e) => {
-      //
-      //  })
-      //sync
-      producer.send(data)
-      producer.close()
+      producer.send(createMessage, (metadata: RecordMetadata, exception: Exception) => {
+        println(s"Message sent to topic:${metadata.topic()} partition:${metadata.partition()}")
+      })
+      Thread.sleep(1000)
     }
   }
 
   private def createMessage = {
-    val runtime = new Date().getTime()
+    val runtime = new Date().getTime
     val idKey = UUID.randomUUID().toString
-    val msg = s"$runtime message example $idKey"
-    val data = new ProducerRecord[String, String]("politrons_topic", idKey, msg)
-    data
+    val msg = s"$runtime message example"
+    new ProducerRecord[String, String](topic, idKey, msg)
   }
 }
