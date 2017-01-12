@@ -26,4 +26,14 @@ $ kafka-server-start.sh /usr/local/etc/kafka/server.properties
 
 Once that you have Kafka running you can just run the Producer app and the ConsumerRun
 
+#Reactive Kafka
+
+![My image](src/main/resources/img/reactive.png)
+
+Nowasdays we should embrace reactive programing as much as we can, and that include distributed messages system
+
+Thanks to Akka framework, we can use Akka streams Kafka ![Documentation](http://doc.akka.io/docs/akka-stream-kafka/current/home.html)
+
+Here in the project you can use reactive consumer ![here](src/main/scala/reactive)
+
 
