@@ -18,9 +18,11 @@ class ConsumerActor extends Actor {
 
   implicit val ec: ExecutionContext = ActorSystem().dispatcher
 
+  private val TOPIC_NAME = "politrons_topic"
+
   val system = ActorSystem("Politron-Chief")
 
-  val topic: Set[String] = Set[String]("politrons_topic")
+  val topic: Set[String] = Set[String](TOPIC_NAME)
 
   val consumerSettings: ConsumerSettings[Array[Byte], String] =
     ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
@@ -28,8 +30,8 @@ class ConsumerActor extends Actor {
       .withGroupId("group1")
       .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
-  val done: Future[Done] =
-    Consumer.committableSource(consumerSettings, Subscriptions.topics("politrons_topic"))
+  val consume: Future[Done] =
+    Consumer.committableSource(consumerSettings, Subscriptions.topics(TOPIC_NAME))
       .mapAsync(1) { msg =>
         Future.successful(Done).map(_ => {
           val message = msg.record.value()
@@ -41,7 +43,7 @@ class ConsumerActor extends Actor {
 
   override def receive: Receive = {
     case ConsumeMsg =>
-      done.onComplete( res => {
+      consume.onComplete(res => {
         println(s"All messages emitted:$res")
       })
   }
