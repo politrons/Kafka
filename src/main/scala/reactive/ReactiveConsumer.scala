@@ -1,3 +1,5 @@
+package reactive
+
 import akka.actor.{ActorSystem, Props}
 
 /**

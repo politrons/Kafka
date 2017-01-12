@@ -1,3 +1,5 @@
+package reactive
+
 import akka.Done
 import akka.actor.{Actor, ActorSystem}
 import akka.kafka.scaladsl.Consumer
