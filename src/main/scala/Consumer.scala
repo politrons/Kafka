@@ -28,17 +28,15 @@ class Consumer(val brokers: String,
 
   def run() = {
     consumer.subscribe(List(topic))
-    Executors.newSingleThreadExecutor.execute(new Runnable {
-      override def run(): Unit = {
-        while (true) {
-          val records = consumer.poll(1000)
-          if (records != null) {
-            for (record <- records) {
-              System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset())
-            }
+    Executors.newSingleThreadExecutor.execute(() => {
+      while (true) {
+        val records = consumer.poll(1000)
+        if (records != null) {
+          for (record <- records) {
+            System.out.println("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset())
           }
-          Thread.sleep(1000)
         }
+        Thread.sleep(1000)
       }
     })
   }
